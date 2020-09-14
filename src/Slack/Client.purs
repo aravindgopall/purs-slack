@@ -1,21 +1,18 @@
 module Slack.Client where
 
 import Prelude
-import Slack.Types
+import Slack.Types (CreateChannel(..), CreateChannelResponse)
 
 import Data.Maybe (Maybe(..), maybe)
 import Data.Tuple (Tuple(..))
-import Effect (Effect)
 import Effect.Aff (launchAff_)
 import Effect.Class (liftEffect)
 import Effect.Class.Console (log)
 import Payload.Client (defaultOpts, mkGuardedClient, unwrapBody)
-import Payload.Client.ClientApi
 import Payload.Client.Options (LogLevel(..))
 import Payload.Debug (showDebug)
 import Payload.Headers as Headers
 import Payload.Spec (Spec(..), POST)
-import Prim.Boolean (True)
 
 type S = { routes :: {  createChannel :: POST "/" { body :: CreateChannel, response :: CreateChannelResponse }}}
 
