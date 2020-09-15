@@ -34,3 +34,23 @@ newtype CreateChannelResponse = CreateChannelResponse
 
 instance sc :: Show CreateChannelResponse where
   show (CreateChannelResponse c) = c.ok <> " - " <> c.channel_id
+
+
+newtype ChannelRequest = ChannelRequest
+  { channel_id :: String
+  }
+
+derive instance gencR :: Generic ChannelRequest _
+
+instance hcR :: HasContentType ChannelRequest where
+  getContentType _ = json
+
+instance ecR :: EncodeBody ChannelRequest where
+  encodeBody = genericEncodeJSON (defaultOptions { unwrapSingleConstructors = true})
+
+newtype OkResponse = OkResponse
+  { ok :: String
+  }
+
+instance so :: Show OkResponse where
+  show (OkResponse ok) = ok.ok

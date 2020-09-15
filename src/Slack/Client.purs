@@ -1,7 +1,6 @@
 module Slack.Client where
 
 import Prelude
-import Slack.Types (CreateChannel(..), CreateChannelResponse)
 
 import Data.Maybe (Maybe(..), maybe)
 import Data.Tuple (Tuple(..))
@@ -13,8 +12,9 @@ import Payload.Client.Options (LogLevel(..))
 import Payload.Debug (showDebug)
 import Payload.Headers as Headers
 import Payload.Spec (Spec(..), POST)
+import Slack.Types (ChannelRequest(..), CreateChannel(..), CreateChannelResponse, OkResponse)
 
-type S = { routes :: {  createChannel :: POST "/" { body :: CreateChannel, response :: CreateChannelResponse }}}
+type S = { routes :: {  createChannel :: POST "/admin.conversations.create" { body :: CreateChannel, response :: CreateChannelResponse }, archiveChannel :: POST "/admin.conversations.archive" { body :: ChannelRequest, response :: OkResponse }}}
 
 spec :: Spec S
 spec = Spec
@@ -32,4 +32,10 @@ callCreateChannel client = do
   let cc = CreateChannel { is_private: true, name: "aravind-ch1", description: Nothing, org_wide: Just true, team_id: Nothing }
   launchAff_ $ do
     repos <- unwrapBody (client.createChannel {body: cc })
+    liftEffect $ log $ "Repos:\n" <> showDebug repos
+
+callArchiveChannel client = do
+  let ac = ChannelRequest { channel_id: "aravind-ch1" }
+  launchAff_ $ do
+    repos <- unwrapBody (client.archiveChannel {body: ac })
     liftEffect $ log $ "Repos:\n" <> showDebug repos
