@@ -54,3 +54,16 @@ newtype OkResponse = OkResponse
 
 instance so :: Show OkResponse where
   show (OkResponse ok) = ok.ok
+
+newtype UserRequest = UserRequest
+  { channel_id :: String
+  , user_ids :: Array String
+  }
+
+derive instance genuR :: Generic UserRequest _
+
+instance huR :: HasContentType UserRequest where
+  getContentType _ = json
+
+instance euR :: EncodeBody UserRequest where
+  encodeBody = genericEncodeJSON (defaultOptions { unwrapSingleConstructors = true})
